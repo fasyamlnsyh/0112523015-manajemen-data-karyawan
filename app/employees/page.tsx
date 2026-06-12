@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 import EmployeeForm from './EmployeeForm';
 import { deleteEmployee } from './actions';
 import Image from 'next/image';
@@ -21,127 +21,134 @@ export default async function EmployeesPage() {
   });
 
   return (
-    <main className="max-w-6xl mx-auto p-6 space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Manajemen Karyawan</h1>
-
-      <EmployeeForm
-        departments={departments}
-        positions={positions}
-        skills={skills}
-      />
-
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-6 py-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Data Karyawan ({employees.length})
-          </h2>
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="bg-blue-600 text-white rounded-2xl p-6 shadow-lg">
+          <h1 className="text-3xl font-bold">Manajemen Data Karyawan</h1>
+          <p className="text-blue-100 mt-2">
+            Kelola data karyawan, jabatan, skill, status, dan foto profil dalam satu halaman.
+          </p>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
-              <tr>
-                <th className="px-4 py-3 text-left">Foto</th>
-                <th className="px-4 py-3 text-left">Nama & Email</th>
-                <th className="px-4 py-3 text-left">Gender</th>
-                <th className="px-4 py-3 text-left">Jabatan & Dept.</th>
-                <th className="px-4 py-3 text-left">Skill</th>
-                <th className="px-4 py-3 text-left">Status</th>
-                <th className="px-4 py-3 text-left">Aksi</th>
-              </tr>
-            </thead>
+        <EmployeeForm
+          departments={departments}
+          positions={positions}
+          skills={skills}
+        />
 
-            <tbody className="divide-y divide-gray-100">
-              {employees.length === 0 && (
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div className="px-6 py-4 border-b bg-gray-50">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Data Karyawan ({employees.length})
+            </h2>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-blue-600 text-white uppercase text-xs">
                 <tr>
-                  <td colSpan={7} className="text-center py-12 text-gray-400">
-                    Belum ada data. Tambahkan karyawan pertama!
-                  </td>
+                  <th className="px-4 py-3 text-left">Foto</th>
+                  <th className="px-4 py-3 text-left">Nama & Email</th>
+                  <th className="px-4 py-3 text-left">Gender</th>
+                  <th className="px-4 py-3 text-left">Jabatan & Dept.</th>
+                  <th className="px-4 py-3 text-left">Skill</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Aksi</th>
                 </tr>
-              )}
+              </thead>
 
-              {employees.map((emp) => (
-                <tr key={emp.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    {emp.photoPath ? (
-                      <Image
-                        src={emp.photoPath}
-                        alt={emp.name}
-                        width={40}
-                        height={40}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">
-                        N/A
-                      </div>
-                    )}
-                  </td>
+              <tbody className="divide-y divide-gray-100">
+                {employees.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="text-center py-12 text-gray-400">
+                      Belum ada data. Tambahkan karyawan pertama!
+                    </td>
+                  </tr>
+                )}
 
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-gray-900">{emp.name}</p>
-                    <p className="text-gray-400 text-xs">{emp.email}</p>
-                  </td>
-
-                  <td className="px-4 py-3 text-gray-600">
-                    {emp.gender === 'male' ? 'Laki-laki' : 'Perempuan'}
-                  </td>
-
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-gray-700">
-                      {emp.position.name}
-                    </p>
-                    <p className="text-gray-400 text-xs">
-                      {emp.position.department.name}
-                    </p>
-                  </td>
-
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {emp.skills.length === 0 && (
-                        <span className="text-gray-400 text-xs">-</span>
+                {employees.map((emp) => (
+                  <tr key={emp.id} className="hover:bg-blue-50 transition">
+                    <td className="px-4 py-3">
+                      {emp.photoPath ? (
+                        <Image
+                          src={emp.photoPath}
+                          alt={emp.name}
+                          width={40}
+                          height={40}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-semibold">
+                          N/A
+                        </div>
                       )}
+                    </td>
 
-                      {emp.skills.map((s) => (
-                        <span
-                          key={s.id}
-                          className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full"
-                        >
-                          {s.name}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-gray-900">{emp.name}</p>
+                      <p className="text-gray-400 text-xs">{emp.email}</p>
+                    </td>
 
-                  <td className="px-4 py-3">
-                    <span className="text-xs px-2 py-1 rounded-full font-medium bg-gray-100 text-gray-600">
-                      {emp.status === 'active'
-                        ? 'Aktif'
-                        : emp.status === 'probation'
-                        ? 'Masa Percobaan'
-                        : 'Tidak Aktif'}
-                    </span>
-                  </td>
+                    <td className="px-4 py-3 text-gray-600">
+                      {emp.gender === 'male' ? 'Laki-laki' : 'Perempuan'}
+                    </td>
 
-                  <td className="px-4 py-3">
-                    <form
-                      action={async () => {
-                        'use server';
-                        await deleteEmployee(emp.id);
-                      }}
-                    >
-                      <button
-                        type="submit"
-                        className="text-red-500 hover:text-red-700 text-sm font-medium"
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-gray-700">
+                        {emp.position.name}
+                      </p>
+                      <p className="text-gray-400 text-xs">
+                        {emp.position.department.name}
+                      </p>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap gap-1">
+                        {emp.skills.length === 0 && (
+                          <span className="text-gray-400 text-xs">-</span>
+                        )}
+
+                        {emp.skills.map((s) => (
+                          <span
+                            key={s.id}
+                            className="bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded-full"
+                          >
+                            {s.name}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-700">
+                        {emp.status === 'active'
+                          ? 'Aktif'
+                          : emp.status === 'probation'
+                          ? 'Masa Percobaan'
+                          : 'Tidak Aktif'}
+                      </span>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <form
+                        action={async () => {
+                          'use server';
+                          await deleteEmployee(emp.id);
+                        }}
                       >
-                        Hapus
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        <button
+                          type="submit"
+                          className="bg-red-50 text-red-600 px-3 py-1 rounded-lg hover:bg-red-100 text-sm font-medium"
+                        >
+                          Hapus
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
