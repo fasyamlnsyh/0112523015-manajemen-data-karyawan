@@ -1,0 +1,42 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  const deptTech = await prisma.department.create({
+    data: { name: 'Technology' },
+  });
+
+  const deptHR = await prisma.department.create({
+    data: { name: 'Human Resource' },
+  });
+
+  await prisma.position.createMany({
+    data: [
+      { name: 'Frontend Developer', departmentId: deptTech.id },
+      { name: 'Backend Developer', departmentId: deptTech.id },
+      { name: 'HR Generalist', departmentId: deptHR.id },
+      { name: 'Recruitment Staff', departmentId: deptHR.id },
+    ],
+  });
+
+  await prisma.skill.createMany({
+    data: [
+      { name: 'React.js' },
+      { name: 'Node.js' },
+      { name: 'MySQL' },
+      { name: 'UI/UX Design' },
+    ],
+  });
+
+  console.log('Seed berhasil!');
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+  });
